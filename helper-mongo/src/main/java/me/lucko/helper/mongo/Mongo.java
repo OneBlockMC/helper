@@ -48,42 +48,4 @@ public interface Mongo extends Terminable {
     @Nonnull
     MongoClient getClient();
 
-    /**
-     * Gets the main database in use by the instance.
-     *
-     * @return the main database
-     */
-    @Nonnull
-    MongoDatabase getDatabase();
-
-    /**
-     * Gets a specific database instance
-     *
-     * @param name the name of the database
-     * @return the database
-     */
-    MongoDatabase getDatabase(String name);
-
-    /**
-     * Gets the Morphia instance for this datasource
-     *
-     * @return the morphia instance
-     */
-    Morphia getMorphia();
-
-    /**
-     * Gets the main Morphia datastore in use by the instance
-     *
-     * @return the main datastore
-     */
-    Datastore getMorphiaDatastore();
-
-    /**
-     * Gets a specific Morphia datastore instance
-     *
-     * @param name the name of the database
-     * @return the datastore
-     */
-    Datastore getMorphiaDatastore(String name);
-
 }

@@ -27,9 +27,8 @@ package me.lucko.helper.mongo;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.Objects;
-
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 /**
  * Represents the credentials for a remote database.
@@ -37,91 +36,48 @@ import javax.annotation.Nonnull;
 public final class MongoDatabaseCredentials {
 
     @Nonnull
-    public static MongoDatabaseCredentials of(@Nonnull String address, int port, @Nonnull String database, @Nonnull String username, @Nonnull String password) {
-        return new MongoDatabaseCredentials(address, port, database, username, password);
+    public static MongoDatabaseCredentials of(@Nonnull String uri) {
+        return new MongoDatabaseCredentials(uri);
     }
 
     @Nonnull
     public static MongoDatabaseCredentials fromConfig(@Nonnull ConfigurationSection config) {
         return of(
-                config.getString("address", "localhost"),
-                config.getInt("port", 27017),
-                config.getString("database", "minecraft"),
-                config.getString("username", "root"),
-                config.getString("password", "passw0rd")
+                config.getString("uri", "localhost")
         );
     }
 
-    private final String address;
-    private final int port;
-    private final String database;
-    private final String username;
-    private final String password;
+    private final String uri;
 
-    private MongoDatabaseCredentials(@Nonnull String address, int port, @Nonnull String database, @Nonnull String username, @Nonnull String password) {
-        this.address = Objects.requireNonNull(address);
-        this.port = port;
-        this.database = Objects.requireNonNull(database);
-        this.username = Objects.requireNonNull(username);
-        this.password = Objects.requireNonNull(password);
+    private MongoDatabaseCredentials(@Nonnull String uri) {
+        this.uri = Objects.requireNonNull(uri);
     }
 
     @Nonnull
-    public String getAddress() {
-        return this.address;
+    public String getUri() {
+        return this.uri;
     }
 
-    public int getPort() {
-        return this.port;
-    }
-
-    @Nonnull
-    public String getDatabase() {
-        return this.database;
-    }
-
-    @Nonnull
-    public String getUsername() {
-        return this.username;
-    }
-
-    @Nonnull
-    public String getPassword() {
-        return this.password;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
         if (!(o instanceof MongoDatabaseCredentials)) return false;
         final MongoDatabaseCredentials other = (MongoDatabaseCredentials) o;
-
-        return this.getAddress().equals(other.getAddress()) &&
-                this.getPort() == other.getPort() &&
-                this.getDatabase().equals(other.getDatabase()) &&
-                this.getUsername().equals(other.getUsername()) &&
-                this.getPassword().equals(other.getPassword());
+        return this.getUri().equals(other.getUri());
     }
 
     @Override
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
-        result = result * PRIME + this.getPort();
-        result = result * PRIME + this.getAddress().hashCode();
-        result = result * PRIME + this.getDatabase().hashCode();
-        result = result * PRIME + this.getUsername().hashCode();
-        result = result * PRIME + this.getPassword().hashCode();
+        result = result * PRIME + this.getUri().hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         return "MongoDatabaseCredentials(" +
-                "address=" + this.getAddress() + ", " +
-                "port=" + this.getPort() + ", " +
-                "database=" + this.getDatabase() + ", " +
-                "username=" + this.getUsername() + ", " +
-                "password=" + this.getPassword() + ")";
+                "uri=" + this.getUri() + ")";
     }
 }
