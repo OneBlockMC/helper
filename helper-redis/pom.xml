@@ -55,11 +55,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <shadedArtifactAttached>false</shadedArtifactAttached>
-                </configuration>
+                <version>${shade.version}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -67,7 +63,24 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <minimizeJar>true</minimizeJar>
+                            <minimizeJar>false</minimizeJar>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <artifactSet>
+                                <includes>
+                                    <include>redis.clients:jedis</include>
+                                    <include>org.apache.commons:commons-pool2</include>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>redis.clients.util</pattern>
+                                    <shadedPattern>${shade.pattern}jedisutil</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache.commons.pool</pattern>
+                                    <shadedPattern>${shade.pattern}commonspool</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
@@ -120,14 +133,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-            <version>3.23.5</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-
         <!-- helper-redis related dependencies -->
         <dependency>
             <groupId>redis.clients</groupId>
@@ -141,6 +146,14 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
             <version>2.6.0</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.23.5</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
