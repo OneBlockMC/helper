@@ -26,6 +26,7 @@
 package me.lucko.helper.redis.plugin;
 
 import com.google.common.reflect.TypeToken;
+
 import me.lucko.helper.Schedulers;
 import me.lucko.helper.messaging.AbstractMessenger;
 import me.lucko.helper.messaging.Channel;
@@ -33,15 +34,12 @@ import me.lucko.helper.redis.Redis;
 import me.lucko.helper.redis.RedisCredentials;
 import me.lucko.helper.terminable.composite.CompositeTerminable;
 import me.lucko.helper.utils.Log;
-import org.redisson.Redisson;
-import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
+
 import redis.clients.jedis.BinaryJedisPubSub;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import javax.annotation.Nonnull;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Objects;
@@ -49,11 +47,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.annotation.Nonnull;
+
 public class HelperRedis implements Redis {
 
     private final JedisPool jedisPool;
     private final AbstractMessenger messenger;
-    private final RedissonClient client;
 
     private final Set<String> channels = new HashSet<>();
     private final CompositeTerminable registry = CompositeTerminable.create();
@@ -63,12 +62,6 @@ public class HelperRedis implements Redis {
     public HelperRedis(@Nonnull RedisCredentials credentials) {
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(16);
-
-        Config redissonConfig = new Config();
-        redissonConfig.useSingleServer()
-                .setAddress(credentials.getAddress())
-                .setPassword(credentials.getPassword());
-        this.client = Redisson.create(redissonConfig);
 
         // setup jedis
         if (credentials.getPassword().trim().isEmpty()) {
@@ -161,12 +154,6 @@ public class HelperRedis implements Redis {
         return getJedisPool().getResource();
     }
 
-    @Nonnull
-    @Override
-    public RedissonClient getRedissonClient() {
-        return client;
-    }
-
     @Override
     public void close() throws Exception {
         if (this.listener != null) {
@@ -176,10 +163,6 @@ public class HelperRedis implements Redis {
 
         if (this.jedisPool != null) {
             this.jedisPool.close();
-        }
-
-        if (this.client != null) {
-            client.shutdown();
         }
 
         this.registry.close();
