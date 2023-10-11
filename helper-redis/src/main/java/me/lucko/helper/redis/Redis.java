@@ -28,6 +28,7 @@ package me.lucko.helper.redis;
 import me.lucko.helper.messaging.Messenger;
 import me.lucko.helper.terminable.Terminable;
 
+import org.redisson.api.RedissonClient;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -53,5 +54,13 @@ public interface Redis extends Terminable, Messenger {
      */
     @Nonnull
     Jedis getJedis();
+
+    /**
+     * Gets a RedissonClient instance from Redisson
+     *
+     * @return a redisson client instance
+     */
+    @Nonnull
+    RedissonClient getRedissonClient();
 
 }
