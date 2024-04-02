@@ -25,6 +25,8 @@
 
 package me.lucko.helper;
 
+import com.github.Anon8281.universalScheduler.UniversalScheduler;
+import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
 import me.lucko.helper.internal.LoaderUtils;
 import me.lucko.helper.plugin.HelperPlugin;
 import me.lucko.helper.utils.annotation.NonnullByDefault;
@@ -72,6 +74,14 @@ public final class Helper {
         return server().getServicesManager();
     }
 
+    public static TaskScheduler scheduler() {
+        return UniversalScheduler.getScheduler(hostPlugin());
+    }
+
+    /**
+     * Deprecated: not supported by Folia
+     * */
+    @Deprecated
     public static BukkitScheduler bukkitScheduler() {
         return server().getScheduler();
     }
