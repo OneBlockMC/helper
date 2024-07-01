@@ -82,6 +82,7 @@ public class PluginProcessor extends AbstractProcessor {
         Plugin annotation = type.getAnnotation(Plugin.class);
 
         data.put("name", annotation.name());
+        data.put("folia-supported", true);
 
         String version = annotation.version();
         if (!version.isEmpty()) {
